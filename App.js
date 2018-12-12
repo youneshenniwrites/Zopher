@@ -1,7 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
-export default class App extends React.Component {
+// Amplify auth imports and config 
+import Amplify from '@aws-amplify/core'
+import { withAuthenticator } from 'aws-amplify-react-native'
+import config from './aws-exports';
+
+Amplify.configure(config)
+
+class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
@@ -10,6 +17,8 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default withAuthenticator(App, {includeGreetings: true})
 
 const styles = StyleSheet.create({
   container: {
