@@ -15,7 +15,6 @@ import Auth from '@aws-amplify/auth';
 import API, { graphqlOperation } from '@aws-amplify/api'
 import {
   createPost, 
-  listPosts, 
 } from './GraphQL'
 
 // Imports from native-base
@@ -42,12 +41,6 @@ class App extends React.Component {
       )
     })
     .catch(err => console.log(err));
-    try {
-      const graphqldata = await API.graphql(graphqlOperation(listPosts))
-      this.setState({ posts: graphqldata.data.listPosts.items, postContent: '' })
-    } catch (err) {
-      console.log('error: ', err)
-    }
   }
 
   // Get user input
