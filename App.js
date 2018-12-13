@@ -6,6 +6,16 @@ import Amplify from '@aws-amplify/core'
 import { withAuthenticator } from 'aws-amplify-react-native'
 import config from './aws-exports';
 
+// Amplify api imports
+import {
+  createPost, 
+  getPost, 
+  listPosts, 
+  deletePost, 
+  createLike, 
+  deleteLike
+} from './GraphQL'
+
 Amplify.configure(config)
 
 class App extends React.Component {
