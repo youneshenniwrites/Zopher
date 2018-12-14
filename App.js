@@ -2,23 +2,26 @@ import React from 'react'
 import { 
   StyleSheet, 
   View, 
-  TextInput, 
+  TextInput,
+  ScrollView,
+  Dimensions,
 } from 'react-native'
 
 // Amplify auth imports and config 
 import Amplify from '@aws-amplify/core'
 import { withAuthenticator } from 'aws-amplify-react-native'
-import config from './aws-exports';
-import Auth from '@aws-amplify/auth';
+import config from './aws-exports'
+import Auth from '@aws-amplify/auth'
 
 // Amplify api imports
 import API, { graphqlOperation } from '@aws-amplify/api'
 import {
-  createPost, 
+  createPost,
+  listPosts
 } from './GraphQL'
 
 // Imports from native-base
-import { Form, Item, Button, Text } from 'native-base'
+import { Form, Item, Button, Text, Card } from 'native-base'
 
 Amplify.configure(config)
 
@@ -27,10 +30,11 @@ class App extends React.Component {
     postContent: '',
     postOwnerId: '',
     postOwnerUsername: '',
+    posts: [],
   }
 
-  // Get the current authenticated user 
   componentDidMount = async () => {
+    // Get the current authenticated user 
     await Auth.currentAuthenticatedUser()
     .then(user => {
       this.setState(
@@ -40,7 +44,10 @@ class App extends React.Component {
         }
       )
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
+    // Mount all published posts on app load
+    this.listPosts()
+    
   }
 
   // Get user input
@@ -48,7 +55,7 @@ class App extends React.Component {
     this.setState({ [key]: val })
   }
 
-  //Let the user create a new post 
+  // Let the user create a new post 
   createPost = async () => {
     const post = this.state
     if (post.postContent === '') {
@@ -64,8 +71,20 @@ class App extends React.Component {
     }
   }
 
+  // List all posts
+  listPosts = async () => {
+    try {
+      const graphqldata = await API.graphql(graphqlOperation(listPosts))
+      this.setState({ posts: graphqldata.data.listPosts.items, postContent: '' })
+    } 
+    catch (err) {
+      console.log('error: ', err)
+    }
+  }
+
   render() {
     return (
+      <View style={{flex: 1}}>
         <View style={styles.headerStyle}>
           <Form style={{padding: 13}}>
             <Item>
@@ -85,11 +104,31 @@ class App extends React.Component {
             </Button>
           </View>          
         </View>
+        <ScrollView contentContainerStyle={styles.container}>
+          <View style={{flex: 1, alignItems: 'center'}}>          
+            {
+              this.state.posts.map((post, index) => (
+                <Card key={index} style={styles.cardStyle}>
+                  <Text style={styles.postBody}>
+                    {post.postContent}
+                  </Text>                                    
+                  <Text style={styles.postUsername}>{
+                    post.postOwnerUsername}
+                  </Text>         
+                </Card>
+              ))
+            }
+          </View>     
+        </ScrollView>
+      </View>       
     );
   }
 }
 
 export default withAuthenticator(App, {includeGreetings: true})
+
+// Get the width of the device
+let { width } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   container: {
@@ -103,5 +142,33 @@ const styles = StyleSheet.create({
     padding: 13,
     borderBottomWidth: 2,
     borderBottomColor: '#3354fd'
-  }
+  },
+  postUsername: { 
+    fontSize: 18, 
+    color: '#3354fd'
+  },
+  postBody: { 
+    fontSize: 24, 
+    color: '#1986f9'
+  },
+  buttonStyle : {
+    marginLeft: 21,
+    marginRight: 21,
+    padding: 22,
+  },
+  cardStyle: {
+    backgroundColor: '#ffdddddd',
+    borderBottomWidth: 5,
+    borderBottomColor: '#3354fd', 
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width * 0.95,
+    marginTop: 10
+  },
+  cardFooterStyle: {
+    flexDirection: 'row', 
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  } 
 });
