@@ -74,8 +74,15 @@ class App extends React.Component {
   // List all posts
   listPosts = async () => {
     try {
-      const graphqldata = await API.graphql(graphqlOperation(listPosts))
-      this.setState({ posts: graphqldata.data.listPosts.items, postContent: '' })
+      const graphqldata = await API.graphql(
+        graphqlOperation(listPosts)
+      )
+      this.setState(
+        { 
+          posts: graphqldata.data.listPosts.items, 
+          postContent: '' 
+        }
+      )
     } 
     catch (err) {
       console.log('error: ', err)
