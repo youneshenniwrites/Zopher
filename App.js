@@ -3,6 +3,7 @@ import {
   View, 
   TextInput,
   ScrollView,
+  Alert
 } from 'react-native'
 
 // Amplify auth imports and config 
@@ -15,11 +16,12 @@ import Auth from '@aws-amplify/auth'
 import API, { graphqlOperation } from '@aws-amplify/api'
 import {
   createPost,
-  listPosts
+  listPosts,
+  deletePost,
 } from './GraphQL'
 
 // Imports from native-base
-import { Form, Item, Button, Text, Card } from 'native-base'
+import { Form, Item, Button, Text, Card, Icon } from 'native-base'
 
 // Import style
 import styles from './Styles'
@@ -90,7 +92,33 @@ class App extends React.Component {
     }
   }
 
+  // Delete a post
+  deletePostAlert = async (post) => {
+    await Alert.alert(
+      'Delete Post',
+      'Are you sure you wanna delete this post?',
+      [
+        {text: 'Cancel', onPress: () => console.log('Canceled'), style: 'cancel'},
+        {text: 'OK', onPress: () => this.deletePost(post)},
+      ],
+      { cancelable: false }
+    )
+  }
+
+  deletePost = async (post) => {
+    const postId = await post['id'] 
+    try {
+      await API.graphql(graphqlOperation(deletePost, { id: postId }))
+      await this.componentDidMount()
+      console.log('Post successfully deleted.')
+    } catch (err) {
+      console.log('Error deleting post.', err)
+    }
+  }
+
   render() {
+    // Grab the ID of the logged in user
+    let loggedInUser = this.state.postOwnerId
     return (
       <View style={{flex: 1}}>
         <View style={styles.headerStyle}>
@@ -121,8 +149,15 @@ class App extends React.Component {
                     {post.postContent}
                   </Text>                                    
                   <Text style={styles.postUsername}>
-                  {post.postOwnerUsername}
-                  </Text>         
+                    {post.postOwnerUsername}
+                  </Text>
+                  {/* Check if the logged in user is the post owner */}
+                  { post.postOwnerId === loggedInUser &&
+                    <Icon
+                      name='ios-trash' 
+                      onPress={() => this.deletePostAlert(post)}
+                    />
+                  }        
                 </Card>
               ))
             }
