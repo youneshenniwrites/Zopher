@@ -92,20 +92,22 @@ class App extends React.Component {
     }
   }
 
-  // Delete a post
+  // Alert users when they press the delete button
   deletePostAlert = async (post) => {
     await Alert.alert(
       'Delete Post',
       'Are you sure you wanna delete this post?',
       [
         {text: 'Cancel', onPress: () => console.log('Canceled'), style: 'cancel'},
-        {text: 'OK', onPress: () => this.deletePost(post)},
+        {text: 'OK', onPress: () => this.confirmDeletePost(post)},
       ],
       { cancelable: false }
     )
   }
 
-  deletePost = async (post) => {
+  // Delete a post instance
+  confirmDeletePost = async (post) => {
+    // Grab the post id
     const postId = await post['id'] 
     try {
       await API.graphql(graphqlOperation(deletePost, { id: postId }))
