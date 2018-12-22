@@ -3,7 +3,8 @@ import {
   View, 
   TextInput,
   ScrollView,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native'
 
 // Amplify auth imports and config 
@@ -18,6 +19,8 @@ import {
   createPost,
   listPosts,
   deletePost,
+  createLike,
+  deleteLike
 } from './GraphQL'
 
 // Imports from native-base
@@ -34,6 +37,9 @@ class App extends React.Component {
     postOwnerId: '',
     postOwnerUsername: '',
     posts: [],
+    likeOwnerUsername: '',
+    likeOwnerId: '',
+    numberLikes: 0,
   }
 
   componentDidMount = async () => {
@@ -44,16 +50,17 @@ class App extends React.Component {
         {  
           postOwnerUsername: user.username,
           postOwnerId: user.attributes.sub,
+          likeOwnerUsername: user.username,
+          likeOwnerId: user.attributes.sub 
         }
       )
     })
     .catch(err => console.log(err))
     // Mount all published posts on app load
     this.listPosts()
-    
   }
 
-  // Get user input
+  // Get the user input for the post 
   onChangeText = (key, val) => {
     this.setState({ [key]: val })
   }
@@ -64,7 +71,7 @@ class App extends React.Component {
     if (post.postContent === '') {
       console.log('Write something!') 
       return
-    }   
+    }
     try {
       await API.graphql(graphqlOperation(createPost, post))
       await this.componentDidMount()
@@ -118,6 +125,50 @@ class App extends React.Component {
     }
   }
 
+  toggleLikePost = async (post) => {
+    const loggedInUser = await this.state.postOwnerId
+    // Get the like instance of the logged in user
+    const likeUserObject = await post.likes.items.filter(
+      obj => obj.likeOwnerId === loggedInUser
+    )
+    // If there is a like instance fire a delete action
+    if (likeUserObject.length !== 0) {
+      await this.deleteLike(likeUserObject)
+      return
+    }
+    // Otherwise create a like instance
+    await this.createLike(post)
+  }
+
+  createLike = async (post) => {
+    const postId = await post['id']
+    this.setState({numberLikes: 1})
+    const like = {
+      likeOwnerId: this.state.likeOwnerId,
+      numberLikes: this.state.numberLikes,
+      likeOwnerUsername: this.state.likeOwnerUsername,
+      id: postId,
+    }
+    try {
+      await API.graphql(graphqlOperation(createLike, like))
+      console.log('Like successfully created.', like)
+      await this.componentDidMount()
+    } catch (err) {
+      console.log('Error creating like.', err)
+    }
+  }
+  
+  deleteLike = async (likeUserObject) => {
+    const likeId = await likeUserObject[0]['id']
+    try {
+      await API.graphql(graphqlOperation(deleteLike, { id: likeId }))
+      console.log('Like successfully deleted.')
+      await this.componentDidMount()
+    } catch (err) {
+      console.log('Error deleting like.', err)
+    }
+  }
+
   render() {
     // Grab the ID of the logged in user
     let loggedInUser = this.state.postOwnerId
@@ -147,19 +198,68 @@ class App extends React.Component {
             {
               this.state.posts.map((post, index) => (
                 <Card key={index} style={styles.cardStyle}>
+                  {/* Post body */}
                   <Text style={styles.postBody}>
                     {post.postContent}
                   </Text>                                    
                   <Text style={styles.postUsername}>
                     {post.postOwnerUsername}
                   </Text>
-                  {/* Check if the logged in user is the post owner */}
-                  { post.postOwnerId === loggedInUser &&
-                    <Icon
-                      name='ios-trash' 
-                      onPress={() => this.deletePostAlert(post)}
-                    />
-                  }        
+                  {/* Like button functionality */}
+                  <View style={styles.cardFooterStyle}>
+                    {/* Logged in user liked this post */}
+                    {
+                      post.likes.items.length !== 0 &&
+                      post.likes.items.filter(
+                        obj => obj.likeOwnerId === loggedInUser
+                        ).length === 1 &&
+                      <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                        <TouchableOpacity
+                          onPress={() => this.toggleLikePost(post)}>
+                          <Icon
+                            name='md-heart'
+                            style={{ fontSize: 55, color: '#fb7777' }}
+                          />
+                        </TouchableOpacity>
+                      </View>       
+                    }
+                    {/* Logged in user did not like this post */}
+                    {
+                      post.likes.items.length !== 0 && 
+                      post.likes.items.filter(
+                        obj => obj.likeOwnerId === loggedInUser
+                        ).length === 0 &&
+                      <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                        <TouchableOpacity
+                          onPress={() => this.toggleLikePost(post)}>
+                          <Icon
+                            name='md-heart'
+                            style={{ fontSize: 55, color: '#69ff' }}
+                          />
+                        </TouchableOpacity>
+                      </View>              
+                    }
+                    {/* Post has no likes yet */}
+                    {
+                      post.likes.items.length === 0 && 
+                      <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                        <TouchableOpacity
+                          onPress={() => this.toggleLikePost(post)}>
+                          <Icon
+                            name='md-heart'
+                            style={{ fontSize: 55, color: '#69ff' }}
+                          />
+                        </TouchableOpacity>
+                      </View>                  
+                    }
+                    {/* Show delete Icon if logged in user is the post owner */}
+                    { post.postOwnerId === loggedInUser &&
+                      <Icon
+                        name='ios-trash' 
+                        onPress={() => this.deletePostAlert(post)}
+                      />
+                    }  
+                  </View>      
                 </Card>
               ))
             }
