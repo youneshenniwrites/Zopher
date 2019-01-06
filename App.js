@@ -250,7 +250,7 @@ class App extends React.Component {
                             style={{ fontSize: 55, color: '#69ff' }}
                           />
                         </TouchableOpacity>
-                      </View>                  
+                      </View>           
                     }
                     {/* Show delete Icon if logged in user is the post owner */}
                     { post.postOwnerId === loggedInUser &&
