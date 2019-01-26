@@ -7,4 +7,6 @@
 ###### 3. `npm install -g expo-cli`
 ###### 4. `yarn add native-base@2.8.0`
 ###### 5. `expo start --ios`
-#### Contributions to this project are more than welcome.
+
+#### Check out the full set up process on here: https://bit.ly/2QoI3JO
+#### Help grow this project by sending pull requests.
