@@ -8,5 +8,5 @@
 ###### 4. `yarn add native-base@2.8.0`
 ###### 5. `expo start --ios`
 
-#### Check out the full set up process on here: https://bit.ly/2QoI3JO
+#### Check out the full set up process in the Medium story: https://bit.ly/2QoI3JO
 #### Help grow this project by sending pull requests.
