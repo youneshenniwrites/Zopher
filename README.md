@@ -1,4 +1,4 @@
-# React Native twitter with AWS Amplify 
+# React Native Twitter app with AWS Amplify and Expo
 
 ![zopher](https://user-images.githubusercontent.com/26605247/54273843-9afd5400-457e-11e9-979e-e2bc714c0a01.png)
 
