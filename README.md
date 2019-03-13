@@ -59,7 +59,7 @@ amplify init
 
 Follow the same instructions as below.
 
-<img width="561" alt="init" src="https://user-images.githubusercontent.com/26605247/54110565-98152e80-43d9-11e9-9eed-e728cbf2ecd6.png">
+<img width="725" alt="init" src="https://user-images.githubusercontent.com/26605247/54283592-42d24c00-4596-11e9-81bc-2348ad864b8e.png">
 
 4. Configure an Amazon Cognito User Pool to store users credentials.
 ```
@@ -74,9 +74,9 @@ amplify add auth
 amplify push
 ```
 
-The AWS Amplify CLI will create an Amazon Cognito User Pool and Identity Pool to store data crendentials.
+After few minutes of automated operations, the AWS Amplify CLI will create an Amazon Cognito User Pool and Identity Pool to store data crendentials in the cloud.
 
-<img width="473" alt="cloudformation" src="https://user-images.githubusercontent.com/26605247/54111473-d7447f00-43db-11e9-9fe8-57edd0a36fe8.png">
+<img width="728" alt="auth" src="https://user-images.githubusercontent.com/26605247/54283648-5c739380-4596-11e9-9e6e-934b42b0d855.png">
 
 
 # Running the application
