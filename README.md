@@ -1,4 +1,6 @@
-# Serverless Tweeting Application. 
+# Serverless Tweeting Application
+
+![zopher](https://user-images.githubusercontent.com/26605247/54273843-9afd5400-457e-11e9-979e-e2bc714c0a01.png)
 
 React Native front end integrated with AWS Amplify authentication and GraphQL back-end.
 
