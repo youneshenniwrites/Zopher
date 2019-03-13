@@ -1,6 +1,6 @@
 # React Native Twitter app with AWS Amplify and Expo
 
-![zopher](https://user-images.githubusercontent.com/26605247/54273843-9afd5400-457e-11e9-979e-e2bc714c0a01.png)
+![layout](https://user-images.githubusercontent.com/26605247/54287147-09e9a580-459d-11e9-94b2-2bbd23a9e148.png)
 
 This project integrates a React Native front-end with an AWS Amplify back-end that has user authentication (AWS Cognito) and a GraphQL API (AWS AppSync) for CRUD operations between the client and the database (Amazon DynamoDB).
 
