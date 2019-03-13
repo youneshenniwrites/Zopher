@@ -10,7 +10,7 @@ import {
 // Amplify auth imports and config 
 import Amplify from '@aws-amplify/core'
 import { withAuthenticator } from 'aws-amplify-react-native'
-import config from './aws-exports'
+import config from './src/aws-exports'
 import Auth from '@aws-amplify/auth'
 
 // Amplify api imports
@@ -21,13 +21,13 @@ import {
   deletePost,
   createLike,
   deleteLike
-} from './GraphQL'
+} from './src/components/GraphQL/GraphQL'
 
 // Imports from native-base
 import { Form, Item, Button, Text, Card, Icon } from 'native-base'
 
 // Import style
-import styles from './Styles'
+import styles from './src/components/Styles'
 
 Amplify.configure(config)
 
