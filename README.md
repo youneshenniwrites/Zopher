@@ -1,12 +1,22 @@
-# Serverless Tweeting Application
+# React Native twitter with AWS Amplify 
 
 ![zopher](https://user-images.githubusercontent.com/26605247/54273843-9afd5400-457e-11e9-979e-e2bc714c0a01.png)
 
-React Native front end integrated with AWS Amplify authentication and GraphQL back-end.
+This project integrates a React Native front-end with an AWS Amplify back-end that has users authentication (AWS Cognito) and GraphQL API for CRUD operations (AWS AppSync, Amazon DynamoDB).
 
-## Overview
+## App Overview
 
-* Authentication, create posts, like posts, delete own posts.
+* Users can sign up/in to the app.
+
+* Users can create posts by pressing the add button, writing inside the Modal, and pressing submit.
+
+* Users can like/unlike posts.
+
+* Users can delete their own posts.
+
+* Users can update the posts feed by:
+  * Pressing the reload button. 
+  * Performing a pull-to-refresh.
 
 ## Prerequisites
 
