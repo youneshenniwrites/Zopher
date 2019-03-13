@@ -2,7 +2,7 @@
 
 ![zopher](https://user-images.githubusercontent.com/26605247/54273843-9afd5400-457e-11e9-979e-e2bc714c0a01.png)
 
-This project integrates a React Native front-end with an AWS Amplify back-end that has users authentication (AWS Cognito) and GraphQL API for CRUD operations (AWS AppSync, Amazon DynamoDB).
+This project integrates a React Native front-end with an AWS Amplify back-end that has user authentication (AWS Cognito) and a GraphQL API (AWS AppSync) for CRUD operations between the client and the database (Amazon DynamoDB).
 
 ## App Overview
 
@@ -62,26 +62,37 @@ Follow the same instructions as below.
 <img width="725" alt="init" src="https://user-images.githubusercontent.com/26605247/54283592-42d24c00-4596-11e9-81bc-2348ad864b8e.png">
 
 4. Configure an Amazon Cognito User Pool to store users credentials.
+
 ```
 amplify add auth
 
 # When prompt, choose: Yes, use the default configuration.
 ```
 
-5. Deploy your project to the AWS.
+5. Add the API service to use GraphQL and store data in Amazon DynammoDB. 
+
+```
+amplify add api
+```
+
+Follow the below configuration.
+
+<img width="718" alt="api" src="https://user-images.githubusercontent.com/26605247/54285392-c6da0300-4599-11e9-9eae-a445cd97cb43.png">
+
+6. Time to deploy your project to AWS.
 
 ```
 amplify push
 ```
 
-After few minutes of automated operations, the AWS Amplify CLI will create an Amazon Cognito User Pool and Identity Pool to store data crendentials in the cloud.
+<img width="718" alt="push" src="https://user-images.githubusercontent.com/26605247/54285245-811d3a80-4599-11e9-83b0-093e40087b9a.png">
 
-<img width="728" alt="auth" src="https://user-images.githubusercontent.com/26605247/54283648-5c739380-4596-11e9-9e6e-934b42b0d855.png">
+After few minutes of automated operations, the Amplify CLI will create an Amazon Cognito User Pool and Identity Pool to store users crendentials and an AWS AppSync GraphQL API to allow for CRUD operations between client and servers.
 
-
-# Running the application
+## Running the application
 
 1. Install client dependencies.
+
 ```
 yarn
 
