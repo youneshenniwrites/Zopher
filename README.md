@@ -36,7 +36,7 @@ This project integrates a React Native front-end with an AWS Amplify back-end th
 1. Clone this repo to your local machine.
 
 ```
-git clone https://github.com/jtaylor1989/Zopher.git
+git clone https://github.com/yhenni1989/Zopher.git
 
 cd Zopher
 ```
